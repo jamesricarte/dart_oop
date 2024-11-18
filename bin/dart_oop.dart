@@ -19,7 +19,11 @@ class Car2 {
   String brand;
   int year;
 
+  //Default Constructor
   Car2(this.brand, this.year);
+
+  //Named Constructor
+  Car2.namedConstructor(this.brand) : year = 2024;
 
   void displayInfo() {
     print('Brand: $brand, Year: $year');
@@ -113,6 +117,113 @@ class Dog2 extends Animal2 {
   }
 }
 
+//Abstraction
+abstract class Shape {
+  void draw();
+}
+
+class Circle extends Shape {
+  @override
+  void draw() {
+    print('Drawing a Circle');
+  }
+}
+
+//Interfaces and Mixins
+class Printer {
+  void printDocument() {
+    print('Printing document...');
+  }
+}
+
+class Scanner {
+  void scanDocument() {
+    print('Scanning document...');
+  }
+}
+
+class AllInOne implements Printer, Scanner {
+  @override
+  void printDocument() {
+    print('All-in-one Printing...');
+  }
+
+  @override
+  void scanDocument() {
+    print('All-in-one Scanning...');
+  }
+}
+
+// Static members
+class Calculator {
+  static const double pi = 3.14;
+
+  static double calculateArea(double radius) {
+    return pi * radius * radius;
+  }
+}
+
+//Advanced using of interfaces and mixins
+abstract class Authenticatetable {
+  bool login(String username, String password);
+}
+
+abstract class Loggable {
+  void logEvent(String event);
+}
+
+mixin AuditLogger {
+  void logAudit(String action) {
+    print("Audit Log: $action");
+  }
+}
+
+mixin ActivityTracker {
+  List<String> _activityLog = [];
+
+  void addActivity(String activity) {
+    _activityLog.add(activity);
+    print("Activity Added: $activity");
+  }
+
+  void showActivities() {
+    print("Activities: $_activityLog");
+  }
+}
+
+class User {
+  final String username;
+
+  User(this.username);
+}
+
+class Admin extends User implements Authenticatetable, Loggable {
+  Admin(String username) : super(username);
+
+  //Implementing Authenticable
+  @override
+  bool login(String username, String password) {
+    print("$username logged in as Admin");
+    return true;
+  }
+
+  //Implementing Loggable
+  @override
+  void logEvent(String event) {
+    print("Admin log: $event");
+  }
+}
+
+//Extending Admin with Mixins
+class SuperAdmin extends Admin with AuditLogger, ActivityTracker {
+  SuperAdmin(String username) : super(username);
+
+  void manageSystem() {
+    logAudit("Systenm setting updated.");
+    addActivity("Managed system settings.");
+  }
+}
+
 void main() {
 //Declaring basic class without constructor
   Car myCar = Car();
@@ -122,6 +233,7 @@ void main() {
 
   //Declaring class with constructor
   Car2 car = Car2('Toyota', 2022);
+  Car2.namedConstructor('Honda');
   car.displayInfo();
 
   //Encapsulation
@@ -145,4 +257,27 @@ void main() {
   animal2.sound();
   animal2 = Cat();
   animal2.sound();
+
+  //Abstraction
+  Shape shape = Circle();
+  shape.draw();
+
+  //Interfaces and Mixins
+  AllInOne device = AllInOne();
+  device.printDocument();
+  device.scanDocument();
+
+  //Static members
+  print(Calculator.calculateArea(5));
+
+  //Advanced using of interfaced and mixins
+  Admin admin = Admin("AdminUser");
+  admin.login("AdminUser", "password123");
+  admin.logEvent("User Management Acessed");
+
+  SuperAdmin superAdmin = SuperAdmin("SuperAdminUser");
+  superAdmin.login("SuperAdminUser", "securePassword");
+  superAdmin.logEvent("Critical Settings Accessed");
+  superAdmin.manageSystem();
+  superAdmin.showActivities();
 }
